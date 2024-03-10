@@ -1,0 +1,40 @@
+<!-- app.component.html -->
+<h1>My Todo List</h1>
+<div class="input-container">
+  <input type="text" [(ngModel)]="taskDescription" placeholder="Add a new task..." class="styled-input">
+  <input type="date" [(ngModel)]="taskStartDate" placeholder="Start Date" class="styled-input">
+  <input type="date" [(ngModel)]="taskEndDate" placeholder="Target Date" class="styled-input">
+  <select [(ngModel)]="filterOption" class="styled-select">
+    <option value="all">All</option>
+    <option value="completed">Completed</option>
+    <option value="pending">Pending</option>
+  </select>
+  <button (click)="addTask()" class="styled-button">Add Task</button>
+</div>
+
+<table class="todo-table">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Start Date</th>
+      <th>Target Date</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let task of filteredTasks()" [ngClass]="{
+      'task-overdue': isOverdue(task) && !task.completed,
+      'task-completed': task.completed,
+      'task-within-time': !isOverdue(task) && !task.completed
+    }" (click)="toggleTaskStatus(task)">
+      <td>{{ task.description }}</td>
+      <td>{{ task.startDate | date }}</td>
+      <td>{{ task.targetDate | date }}</td>
+      <td>{{ task.completed ? 'Completed' : 'Pending' }}</td>
+      <td>
+        <button (click)="confirmDeleteTask(tasks.indexOf(task))" class="styled-delete-button">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
